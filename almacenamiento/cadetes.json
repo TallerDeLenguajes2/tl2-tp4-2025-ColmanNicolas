@@ -1,0 +1,52 @@
+[
+  {
+    "Nombre": "Pepito Perez",
+    "Telefono": "3583454",
+    "Direccion": "Avenida Avellanea 999"
+  },
+  {
+    "Nombre": "Ana Gomez",
+    "Telefono": "3876543",
+    "Direccion": "Calle Falsa 123"
+  },
+  {
+    "Nombre": "Luis Martinez",
+    "Telefono": "3567890",
+    "Direccion": "Boulevard Verde 45"
+  },
+  {
+    "Nombre": "Maria Lopez",
+    "Telefono": "3987654",
+    "Direccion": "Calle Azul 78"
+  },
+  {
+    "Nombre": "Juan Rodriguez",
+    "Telefono": "3543210",
+    "Direccion": "Avenida Libertad 12"
+  },
+  {
+    "Nombre": "Carla Fernandez",
+    "Telefono": "3598765",
+    "Direccion": "Calle Roja 56"
+  },
+  {
+    "Nombre": "Diego Sanchez",
+    "Telefono": "3834567",
+    "Direccion": "Boulevard Amarillo 34"
+  },
+  {
+    "Nombre": "Laura Torres",
+    "Telefono": "3576543",
+    "Direccion": "Calle Naranja 90"
+  },
+  {
+    "Nombre": "Martin Diaz",
+    "Telefono": "3854321",
+    "Direccion": "Avenida Siempre Viva 101"
+  },
+  {
+    "Nombre": "Sofia Ramirez",
+    "Telefono": "3865432",
+    "Direccion": "Calle Lila 22"
+  }
+]
