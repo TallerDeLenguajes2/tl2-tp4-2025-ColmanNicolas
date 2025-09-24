@@ -34,6 +34,18 @@ public class CadeteriaController : ControllerBase
         }
         return Ok(pedidos);
     }
+        // GET: api/cadeteria/getPedidos/1
+    [HttpGet("getPedidos/{nroPedido}")]
+    public ActionResult<List<Pedido>> GetPedidoPorNro(int nroPedido)
+    {
+        Pedido pedido = _cadeteria.BuscarPedidoPorId(nroPedido);
+        if (pedido == null)
+        {
+            return NotFound(new { mensaje = $"No se encontro el pedido de numero {nroPedido}" });
+        }
+        return Ok(pedido);
+    }
+
 
     // GET: api/cadeteria/getCadetes
     [HttpGet("getCadetes")]
@@ -45,6 +57,18 @@ public class CadeteriaController : ControllerBase
             return NotFound(new { mensaje = "No hay cadetes registrados" });
         }
         return Ok(cadetes);
+    }
+
+    // GET: api/cadeteria/getCadetes/1
+    [HttpGet("getCadetes/{idCadete}")]
+    public ActionResult<List<Cadete>> GetCadetesPorId(int idCadete)
+    {
+        Cadete cadete = _cadeteria.BuscarCadetePorId(idCadete);
+        if (cadete == null)
+        {
+            return NotFound(new { mensaje = $"No se encontro el cadete de id: ({idCadete})" });
+        }
+        return Ok(cadete);
     }
 
     // GET: api/cadeteria/getInforme
@@ -81,7 +105,7 @@ public class CadeteriaController : ControllerBase
     [HttpPut("asignar/{idCadete}/{idPedido}")]
     public ActionResult AsignarPedido(int idCadete, int idPedido)
     {
-        var (exito, mensaje) = _cadeteria.AsignarCadeteAPedido( idCadete, idPedido);
+        var (exito, mensaje) = _cadeteria.AsignarCadeteAPedido(idCadete, idPedido);
 
         return exito ? Ok(new { mensaje }) : BadRequest(new { mensaje });
     }
@@ -90,17 +114,17 @@ public class CadeteriaController : ControllerBase
     [HttpPut("estado/{idPedido}/{nuevoEstado}")]
     public ActionResult CambiarEstadoPedido(int idPedido, int nuevoEstado)
     {
-        bool exito = _cadeteria.CambiarEstadoPedido(idPedido, nuevoEstado);
+        bool exito = _cadeteria.CambiarEstadoDePedido(idPedido, nuevoEstado);
         return exito ? Ok("Estado cambiado") : BadRequest("No se pudo cambiar el estado");
     }
 
-    /*
-            // PUT: api/cadeteria/cambiarcadete/1/3
-            [HttpPut("cambiarcadete/{idPedido}/{idNuevoCadete}")]
-            public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
-            {
-                bool exito = _cadeteria.CambiarCadetePedido(idPedido, idNuevoCadete);
-                return exito ? Ok("Cadete cambiado") : BadRequest("No se pudo cambiar el cadete");
-            }
-            */
+    // PUT: api/cadeteria/cambiarcadete/1/3
+    [HttpPut("cambiarcadete/{idPedido}/{idNuevoCadete}")]
+    public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
+    {
+        var (exito, mensaje) = _cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
+
+        return exito ? Ok(new {mensaje}) : BadRequest(new {mensaje});
+    }
+
 }
