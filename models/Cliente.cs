@@ -8,7 +8,7 @@ namespace ClienteClass
     public class Cliente
     {
         private static int Incremental = 1;
-        private int Id { get; }
+        public int Id { get; }
         public string Nombre { get; }
         public string Direccion { get; }
         public string Telefono { get; }

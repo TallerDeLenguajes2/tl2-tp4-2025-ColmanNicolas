@@ -7,10 +7,10 @@ namespace AccesoADatosCSVClass
     public class AccesoADatosCSV : IAccesoADatos
     {
 
-        public Cadeteria? AccesoADatosCadeteria()
+        public Cadeteria AccesoADatosCadeteria()
         {
             string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadeterias.csv");
-            Cadeteria? cadeteria = null;
+            Cadeteria cadeteria = null;
 
             if (File.Exists(ruta))
             {

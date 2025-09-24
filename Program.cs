@@ -1,19 +1,31 @@
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Registramos servicios
-builder.Services.AddControllers();
-builder.Services.AddOpenApi(); // para Swagger
+builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
+builder.Services.AddControllers(); 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi(); // habilita Swagger
-}
+    app.UseSwagger(); 
+    app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API v1"); // ruta del documento OpenAPI
+    c.RoutePrefix = string.Empty; // configura para que, si navegamos la raíz podamos ver la UI de swagger
+});
 
+}
+app.MapControllers();
 app.UseHttpsRedirection();
 
-// Esto permite que los endpoints de tus controllers funcionen
-app.MapControllers();
-
 app.Run();
+

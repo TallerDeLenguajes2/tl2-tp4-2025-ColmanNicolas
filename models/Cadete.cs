@@ -9,7 +9,7 @@ namespace CadeteClass
     public class Cadete
     {
         private static int Incremental = 1;
-        private int Id { get; }
+        public int Id { get; }
         public string Nombre { get; }
         public string Telefono { get; }
         public string Direccion { get; }

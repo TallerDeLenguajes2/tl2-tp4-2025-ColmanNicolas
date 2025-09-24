@@ -6,6 +6,7 @@ using AccesoADatosJsonClass;
 using CadeteClass;
 using ClienteClass;
 using PedidoClass;
+using tl2_tp4_2025_ColmanNicolas.Dtos;
 
 namespace CadeteriaClass
 {
@@ -17,7 +18,7 @@ namespace CadeteriaClass
         private string Nombre { get; }
         private string Telefono { get; }
         private string Direccion { get; }
-        private List<Cadete> Cadetes { get; set;}
+        private List<Cadete> Cadetes { get; set; }
         private List<Pedido> Pedidos { get; set; }
 
         public Cadeteria(string nombre, string telefono, string direccion)
@@ -38,16 +39,24 @@ namespace CadeteriaClass
         {
             this.Cadetes = cadetes;
         }
-        public Pedido CrearPedido(Pedido pedido)
+        public Pedido CrearPedido(PedidoDto pedido)
         {
-            return new Pedido(pedido);
+            var (detallePedido, observacion, nombreCliente, telefonoCliente, direccionCliente, datosRefDireccion) = pedido;
 
+            if (string.IsNullOrWhiteSpace(detallePedido) || string.IsNullOrWhiteSpace(observacion) ||
+                string.IsNullOrWhiteSpace(nombreCliente) || string.IsNullOrWhiteSpace(telefonoCliente) ||
+                string.IsNullOrWhiteSpace(direccionCliente) || string.IsNullOrWhiteSpace(datosRefDireccion))
+            {
+                return null;
+            }
+
+            return new Pedido(detallePedido, observacion, nombreCliente, telefonoCliente, direccionCliente, datosRefDireccion);
         }
-        public Cadete? BuscarCadetePorId(int id)
+        public Cadete BuscarCadetePorId(int id)
         {
             return Cadetes.Find(c => c.ObtenerId() == id);
         }
-        public Pedido? BuscarPedidoPorId(int nroPedido)
+        public Pedido BuscarPedidoPorId(int nroPedido)
         {
             return Pedidos.Find(c => c.ObtenerNro() == nroPedido);
         }
@@ -95,60 +104,75 @@ namespace CadeteriaClass
                 p.ObtenerCadete().ObtenerId() == idCadete
             );
         }
-        public string AsignarCadeteAPedido(int idPedido, int idCadete)
+        public (bool resultado, string mensaje) AsignarCadeteAPedido(int idCadete, int idPedido)
         {
-            Cadete? existeCadete = this.Cadetes.Find(p => p.ObtenerId() == idCadete);
+            Cadete existeCadete = this.Cadetes.Find(p => p.ObtenerId() == idCadete);
             if (existeCadete == null)
             {
-                return $"Error. El cadete de id {idCadete} no se encotró en el sistema.";
+                return (false, $"Error. El cadete de id {idCadete} no se encotró en el sistema.");
             }
 
-            Pedido? existePedido = this.Pedidos.Find(p => p.ObtenerNro() == idPedido);
+            Pedido existePedido = BuscarPedidoPorId(idPedido);
+
             if (existePedido == null)
             {
-                return $"Error. El pedido de id {idPedido} no se encotró en el sistema.";
+                return (false, $"Error. El pedido de id {idPedido} no se encotró en el sistema.");
             }
             if (existePedido.ObtenerCadete() != null)
             {
-                return $"Error. Pedido Nro {existePedido.ObtenerNro()} ya asignado al cadete {existePedido.ObtenerCadete().ObtenerNombre()}.";
+                return (false, $"Error. Pedido Nro {existePedido.ObtenerNro()} ya asignado al cadete {existePedido.ObtenerCadete().ObtenerNombre()}.");
             }
 
             if (existePedido.ObtenerEstado() == Pedido.EstadoPedido.AprobacionPendiente)
             {
-                return $"Error. Pedido Nro {existePedido.ObtenerNro()} se encuentra en estado de aprobacion pendiente, avance su estado a procesando para poder asignar a un cadete";
+                return (false, $"Error. Pedido Nro {existePedido.ObtenerNro()} se encuentra en estado de aprobacion pendiente, avance su estado a procesando para poder asignar a un cadete");
             }
-            existePedido.AvanzarEstadoPedido();
+            existePedido.CambiarEstadoPedido(1);
             existePedido.AsignarCadete(existeCadete);
 
-            return $"Pedido Nro {existePedido.ObtenerNro()} asignado al cadete {existeCadete.ObtenerNombre()}";
+            return (true, $"Pedido Nro {existePedido.ObtenerNro()} asignado al cadete {existeCadete.ObtenerNombre()}");
 
         }
-        public string ReasignarPedido(int idCadete1, int idCadete2, int nroPedido)
+        public (bool resultado, string mensaje) ReasignarPedido(int idCadete2, int nroPedido)
         {
-            Cadete? cadete1 = this.Cadetes.Find(c => c.ObtenerId() == idCadete1);
-            if (cadete1 == null)
-            {
-                return $"Error. No se encontro el cadete de id {idCadete1}";
-            }
+            Cadete cadete2 = BuscarCadetePorId(idCadete2);
+            Pedido existePedido = Pedidos.Find(p => p.ObtenerNro() == nroPedido);
+            Cadete cadete1 = existePedido.ObtenerCadete();
 
-            Cadete? cadete2 = this.Cadetes.Find(c => c.ObtenerId() == idCadete2);
             if (cadete2 == null)
             {
-                return $"Error. No se encontro el cadete de id {idCadete2}";
+                return (false, $"Error. No se encontro el cadete de id {idCadete2}");
             }
 
-            Pedido? existePedido = Pedidos.Find(p => p.ObtenerNro() == nroPedido);
-
-            if (existePedido != null && existePedido.ObtenerCadete().ObtenerId() == idCadete1)
+            if (existePedido == null)
             {
-                existePedido.AsignarCadete(cadete2);
-                return $"Pedido {nroPedido} reasignado desde el cadete {cadete1.ObtenerNombre()} al cadete {cadete2.ObtenerNombre()}";
+                return (false, $"Error. No se encontro el pedido de numero: ({existePedido.ObtenerNro()}).");
+            }
+
+            existePedido.AsignarCadete(cadete2);
+
+            if (cadete1 != null)
+            {
+                return (true, $"Pedido {nroPedido} reasignado desde el cadete {cadete1.ObtenerNombre()} al cadete {cadete2.ObtenerNombre()}");
             }
             else
             {
-                return $"Error. El cadete {cadete1.ObtenerNombre()} no tiene el pedido de número {nroPedido} para reasignar.";
+                return (true, $"Pedido {nroPedido} asignado al cadete {cadete2.ObtenerNombre()}");
             }
+        }
+        public bool CambiarEstadoDePedido(int nro, int codigo)
+        {
+            Pedido pedidoBuscado = BuscarPedidoPorId(nro);
 
+            if (pedidoBuscado == null)
+            {
+                return false;
+            }
+            else
+            {
+                pedidoBuscado.CambiarEstadoPedido(codigo);
+                return true;
+            }
         }
         public override string ToString()
         {
