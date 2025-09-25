@@ -11,31 +11,6 @@ namespace AccesoADatosJsonClass
             WriteIndented = true
         };
 
-        public Cadeteria AccesoADatosCadeteria()
-        {
-            string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadeteria.json");
-
-            if (File.Exists(ruta))
-            {
-                try
-                {
-                    string json = File.ReadAllText(ruta);
-                    Cadeteria cadeteria = JsonSerializer.Deserialize<Cadeteria>(json, options);
-                    return cadeteria;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error al leer cadeteria.json: {ex.Message}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No se encontró el archivo cadeteria.json.");
-            }
-
-            return null;
-        }
-
         public List<Cadete> AccesoADatosCadetes()
         {
             string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadetes.json");
@@ -67,7 +42,7 @@ namespace AccesoADatosJsonClass
 
             try
             {
-                string? carpeta = Path.GetDirectoryName(ruta);
+                string carpeta = Path.GetDirectoryName(ruta);
                 if (!Directory.Exists(carpeta))
                 {
                     Directory.CreateDirectory(carpeta);

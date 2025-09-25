@@ -12,22 +12,12 @@ namespace tl2_tp4_2025_ColmanNicolas.Controllers;
 [Route("api/[controller]")]
 public class CadeteriaController : ControllerBase
 {
-    private readonly AccesoADatosCSV accesoCSV = new AccesoADatosCSV();
-    private readonly AccesoADatosCSV accesoJSON = new AccesoADatosCSV();
-    private readonly Cadeteria _cadeteria;
-
-    public CadeteriaController()
-    {
-        _cadeteria = accesoCSV.AccesoADatosCadeteria();   //recupero cadeteria
-        _cadeteria.IncorporarListadoDeCadetes(accesoJSON.AccesoADatosCadetes());  // recupero cadetes
-
-    }
 
     // GET: api/cadeteria/getPedidos
     [HttpGet("getPedidos")]
     public ActionResult<List<Pedido>> GetPedidos()
     {
-        var pedidos = _cadeteria.ObtenerPedidos();
+        var pedidos = Cadeteria.ObtenerPedidos();
         if (pedidos == null || pedidos.Count == 0)
         {
             return NotFound(new { mensaje = "No hay pedidos registrados" });
@@ -38,7 +28,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getPedidos/{nroPedido}")]
     public ActionResult<List<Pedido>> GetPedidoPorNro(int nroPedido)
     {
-        Pedido pedido = _cadeteria.BuscarPedidoPorId(nroPedido);
+        Pedido pedido = Cadeteria.BuscarPedidoPorId(nroPedido);
         if (pedido == null)
         {
             return NotFound(new { mensaje = $"No se encontro el pedido de numero {nroPedido}" });
@@ -51,7 +41,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getCadetes")]
     public ActionResult<List<Cadete>> GetCadetes()
     {
-        var cadetes = _cadeteria.ObtenerCadetes();
+        var cadetes = Cadeteria.ObtenerCadetes();
         if (cadetes == null || cadetes.Count == 0)
         {
             return NotFound(new { mensaje = "No hay cadetes registrados" });
@@ -63,7 +53,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getCadetes/{idCadete}")]
     public ActionResult<List<Cadete>> GetCadetesPorId(int idCadete)
     {
-        Cadete cadete = _cadeteria.BuscarCadetePorId(idCadete);
+        Cadete cadete = Cadeteria.BuscarCadetePorId(idCadete);
         if (cadete == null)
         {
             return NotFound(new { mensaje = $"No se encontro el cadete de id: ({idCadete})" });
@@ -75,7 +65,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getInforme")]
     public ActionResult<string[]> GetInforme()
     {
-        string[] informeDeCadetes = _cadeteria.Informe();
+        string[] informeDeCadetes = Cadeteria.Informe();
         if (informeDeCadetes.Length == 0)
         {
             return NotFound(new { mensaje = "No hay datos de informe para la fecha solicitada" });
@@ -87,25 +77,36 @@ public class CadeteriaController : ControllerBase
     [HttpPost("postPedido")]
     public ActionResult AgregarPedido([FromBody] PedidoDto pedido)
     {
-        Pedido nuevoPedido = _cadeteria.CrearPedido(pedido);
+        Pedido nuevoPedido = Cadeteria.CrearPedido(pedido);
 
         if (nuevoPedido == null)
         {
             return BadRequest(new { mensaje = "Los datos del pedido están incompletos o son inválidos." });
         }
 
+        Cadeteria.Pedidos.Add(nuevoPedido);
         return Ok(new
         {
             mensaje = "Pedido agregado correctamente",
             pedido = nuevoPedido
         });
     }
+    // POST: api/cadeteria/postCadete
+    [HttpPost("postCadete")]
+    public ActionResult AgregarCadete([FromBody] CadeteDto cadete)
+    {
+        var (Nombre, Telefono, Direccion) = cadete;
+        Cadete nuevoCadete = Cadete.CrearCadete(Nombre,Direccion, Telefono );
+        Cadeteria.IncorporarCadete(nuevoCadete);
+
+        return Ok(new { nuevoCadete });        
+    }
 
     // PUT: api/cadeteria/asignar/1/2
     [HttpPut("asignar/{idCadete}/{idPedido}")]
     public ActionResult AsignarPedido(int idCadete, int idPedido)
     {
-        var (exito, mensaje) = _cadeteria.AsignarCadeteAPedido(idCadete, idPedido);
+        var (exito, mensaje) = Cadeteria.AsignarCadeteAPedido(idCadete, idPedido);
 
         return exito ? Ok(new { mensaje }) : BadRequest(new { mensaje });
     }
@@ -114,7 +115,7 @@ public class CadeteriaController : ControllerBase
     [HttpPut("estado/{idPedido}/{nuevoEstado}")]
     public ActionResult CambiarEstadoPedido(int idPedido, int nuevoEstado)
     {
-        bool exito = _cadeteria.CambiarEstadoDePedido(idPedido, nuevoEstado);
+        bool exito = Cadeteria.CambiarEstadoDePedido(idPedido, nuevoEstado);
         return exito ? Ok("Estado cambiado") : BadRequest("No se pudo cambiar el estado");
     }
 
@@ -122,7 +123,7 @@ public class CadeteriaController : ControllerBase
     [HttpPut("cambiarcadete/{idPedido}/{idNuevoCadete}")]
     public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
     {
-        var (exito, mensaje) = _cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
+        var (exito, mensaje) = Cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
 
         return exito ? Ok(new {mensaje}) : BadRequest(new {mensaje});
     }

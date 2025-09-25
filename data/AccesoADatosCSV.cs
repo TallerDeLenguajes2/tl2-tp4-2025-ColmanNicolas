@@ -6,32 +6,6 @@ namespace AccesoADatosCSVClass
 {
     public class AccesoADatosCSV : IAccesoADatos
     {
-
-        public Cadeteria AccesoADatosCadeteria()
-        {
-            string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadeterias.csv");
-            Cadeteria cadeteria = null;
-
-            if (File.Exists(ruta))
-            {
-                string[] lineas = File.ReadAllLines(ruta);
-                if (lineas.Length > 1)
-                {
-                    string[] campos = lineas[1].Split(',');
-                    string nombre = campos[0];
-                    string telefono = campos[2];
-                    string direccion = campos[1];
-
-                    cadeteria = new Cadeteria(nombre, telefono, direccion);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Error. No se encontro el archivo CSV con cadeterias.");
-            }
-
-            return cadeteria;
-        }
         public List<Cadete> AccesoADatosCadetes()
         {
             string ruta = Directory.GetCurrentDirectory();
@@ -65,8 +39,8 @@ namespace AccesoADatosCSVClass
 
             try
             {
-                // Creamos el directorio si no existe
-                string? carpeta = Path.GetDirectoryName(ruta);
+                // Creo el directorio si no existe
+                string carpeta = Path.GetDirectoryName(ruta);
                 if (!Directory.Exists(carpeta))
                 {
                     Directory.CreateDirectory(carpeta);
@@ -74,10 +48,8 @@ namespace AccesoADatosCSVClass
 
                 using (StreamWriter writer = new StreamWriter(ruta, false)) // false = sobrescribe
                 {
-                    // Cabecera del CSV
                     writer.WriteLine("Nombre,Direccion,Telefono");
 
-                    // Escribimos cada cadete en una línea
                     foreach (Cadete cadete in cadetes)
                     {
                         writer.WriteLine($"{cadete.ObtenerNombre()},{cadete.ObtenerDireccion()},{cadete.ObtenerTelefono()}");
