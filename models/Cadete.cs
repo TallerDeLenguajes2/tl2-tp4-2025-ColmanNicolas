@@ -2,29 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Text.Json.Serialization;
 
 namespace CadeteClass
 {
     public class Cadete
     {
-        private static int Incremental = 1;
         public int Id { get; }
         public string Nombre { get; }
         public string Telefono { get; }
         public string Direccion { get; }
-
-        public Cadete(string nombre, string telefono, string direccion)
+        public Cadete()
         {
-            this.Id = Incremental++;
+            this.Id = 0;
+            this.Nombre = "Sin cadete";
+            this.Telefono = "Sin telefono";
+            this.Direccion = "Sin direccion"; 
+        }
+
+        [JsonConstructor]
+        public Cadete(int id, string nombre, string telefono, string direccion)
+        {
+            this.Id = id;
             this.Nombre = nombre;
             this.Telefono = telefono;
             this.Direccion = direccion;
-        }
-        public static Cadete CrearCadete(string nombre, string telefono, string direccion)
-        {
-
-            return new Cadete(nombre, telefono, direccion);
         }
         public int ObtenerId()
         {

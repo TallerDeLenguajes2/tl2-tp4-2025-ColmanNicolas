@@ -1,17 +1,19 @@
 using System.Text.Json;
 using CadeteClass;
-using CadeteriaClass;
 
-namespace AccesoADatosJsonClass
+namespace tl2_tp4_2025_ColmanNicolas.AccesoADatos
 {
-    public class AccesoADatosJSON : IAccesoADatos
+    public class AccesoADatosCadetes : IAccesoADatos<Cadete>
     {
+        public AccesoADatosCadetes(){}
+
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNameCaseInsensitive = true
         };
 
-        public List<Cadete> AccesoADatosCadetes()
+        public (bool, string, List<Cadete>) Obtener()
         {
             string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadetes.json");
 
@@ -21,22 +23,29 @@ namespace AccesoADatosJsonClass
                 {
                     string json = File.ReadAllText(ruta);
                     List<Cadete> cadetes = JsonSerializer.Deserialize<List<Cadete>>(json, options);
-                    return cadetes ?? new List<Cadete>();
+                    if (cadetes != null)
+                    {
+                        return (true, $"Datos obtenidos con exito", cadetes);
+                    }
+                    else
+                    {
+                        return (false, $"Base de datos Vacia", new List<Cadete>());
+
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al leer cadetes.json: {ex.Message}");
+                    return (false, $"Error al leer cadetes.json: {ex.Message}", new List<Cadete>());
                 }
             }
             else
             {
-                Console.WriteLine("No se encontró el archivo cadetes.json.");
+                return (false, "Error. No se encontró el archivo cadetes.json.", new List<Cadete>());
             }
 
-            return new List<Cadete>();
         }
 
-        public void GuardarDatosDeCadetes(List<Cadete> cadetes)
+        public (bool, string) Guardar(List<Cadete> cadetes)
         {
             string ruta = Path.Combine(Directory.GetCurrentDirectory(), "almacenamiento", "cadetes.json");
 
@@ -51,11 +60,11 @@ namespace AccesoADatosJsonClass
                 string json = JsonSerializer.Serialize(cadetes, options);
                 File.WriteAllText(ruta, json);
 
-                Console.WriteLine("Datos de cadetes guardados correctamente en cadetes.json.");
+                return (true, "Datos de cadetes guardados correctamente en cadetes.json.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al guardar cadetes.json: {ex.Message}");
+                return (false, $"Error al guardar cadetes.json: {ex.Message}");
             }
         }
     }

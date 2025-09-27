@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AccesoADatosCSVClass;
-using AccesoADatosJsonClass;
 using CadeteClass;
 using ClienteClass;
 using PedidoClass;
@@ -11,68 +9,86 @@ using tl2_tp4_2025_ColmanNicolas.Dtos;
 
 namespace CadeteriaClass
 {
-    public static class Cadeteria
+    public class Cadeteria
     {
         private const int CobroPorPedido = 500;
-        public static int Id { get; }
-        public static string Nombre { get; }
-        public static string Telefono { get; }
-        public static string Direccion { get; }
-        public static List<Cadete> Cadetes { get; set; }
-        public static List<Pedido> Pedidos { get; set; }
+        public int Id { get; }
+        public string Nombre { get; }
+        public string Telefono { get; }
+        public string Direccion { get; }
+        public List<Cadete> Cadetes { get; set; }
+        public List<Pedido> Pedidos { get; set; }
 
-        static Cadeteria()
-        {
-            var accesoCSV = new AccesoADatosCSV();
-            Id = 1; 
-            Nombre = "Cadeteria del Barrio"; 
-            Telefono = "123-456-7890";
-            Direccion = "Calle Falsa 123";
-            Cadetes = accesoCSV.AccesoADatosCadetes();
-            Pedidos = new List<Pedido>();
- 
+        public Cadeteria() { }
 
-        }
-
-        public static void IncorporarCadete(Cadete cadete)
+        public void IncorporarCadete(Cadete cadete)
         {
             Cadetes.Add(cadete);
         }
-        public static void IncorporarListadoDeCadetes(List<Cadete> cadetes)
+        public void IncorporarPedido(Pedido pedido)
+        {
+            Pedidos.Add(pedido);
+        }
+        public void IncorporarListadoDeCadetes(List<Cadete> cadetes)
         {
             Cadetes = cadetes;
+
         }
-        public static Pedido CrearPedido(PedidoDto pedido)
+        public void IncorporarListadoDePedidos(List<Pedido> pedidos)
+        {
+            Pedidos = pedidos;
+        }
+        public Pedido CrearPedido(PedidoDto pedido)
         {
             var (detallePedido, observacion, nombreCliente, telefonoCliente, direccionCliente, datosRefDireccion) = pedido;
 
-            if (string.IsNullOrWhiteSpace(detallePedido) || string.IsNullOrWhiteSpace(observacion) ||
-                string.IsNullOrWhiteSpace(nombreCliente) || string.IsNullOrWhiteSpace(telefonoCliente) ||
-                string.IsNullOrWhiteSpace(direccionCliente) || string.IsNullOrWhiteSpace(datosRefDireccion))
+            /* if (string.IsNullOrWhiteSpace(detallePedido) || string.IsNullOrWhiteSpace(observacion) ||
+                 string.IsNullOrWhiteSpace(nombreCliente) || string.IsNullOrWhiteSpace(telefonoCliente) ||
+                 string.IsNullOrWhiteSpace(direccionCliente) || string.IsNullOrWhiteSpace(datosRefDireccion))
+             {
+                 return null;
+             }*/
+            int nroPedido = 1;
+            if (this.Pedidos.Count > 0)
             {
-                return null;
+                nroPedido = this.Pedidos.Last().ObtenerNro() + 1;
             }
-
-            return new Pedido(detallePedido, observacion, nombreCliente, telefonoCliente, direccionCliente, datosRefDireccion);
+            return new Pedido(nroPedido, detallePedido, observacion, nombreCliente, telefonoCliente, direccionCliente, datosRefDireccion);
         }
-        public static Cadete BuscarCadetePorId(int id)
+        public Cadete CrearCadete(string nombre, string telefono, string direccion)
+        {
+
+            /* if (string.IsNullOrWhiteSpace(detallePedido) || string.IsNullOrWhiteSpace(observacion) ||
+                 string.IsNullOrWhiteSpace(nombreCliente) || string.IsNullOrWhiteSpace(telefonoCliente) ||
+                 string.IsNullOrWhiteSpace(direccionCliente) || string.IsNullOrWhiteSpace(datosRefDireccion))
+             {
+                 return null;
+             }*/
+            int idCadete = 1;
+            if (this.Cadetes.Count > 0)
+            {
+                idCadete = this.Cadetes.Last().ObtenerId() + 1;
+            }
+            return new Cadete(idCadete, nombre, telefono, direccion);
+        }
+        public Cadete BuscarCadetePorId(int id)
         {
             return Cadetes.Find(c => c.ObtenerId() == id);
         }
-        public static Pedido BuscarPedidoPorId(int nroPedido)
+        public Pedido BuscarPedidoPorId(int nroPedido)
         {
             return Pedidos.Find(c => c.ObtenerNro() == nroPedido);
         }
 
-        public static List<Cadete> ObtenerCadetes()
+        public List<Cadete> ObtenerCadetes()
         {
             return Cadetes;
         }
-        public static List<Pedido> ObtenerPedidos()
+        public List<Pedido> ObtenerPedidos()
         {
             return Pedidos;
         }
-        public static void QuitarPedidoPorNro(int nro)
+        public void QuitarPedidoPorNro(int nro)
         {
             Pedido pedido = Pedidos.Find(p => p.ObtenerNro() == nro);
             if (pedido != null)
@@ -80,11 +96,11 @@ namespace CadeteriaClass
                 Pedidos.Remove(pedido);
             }
         }
-        public static int JornalACobrar(int idCadete)
+        public int JornalACobrar(int idCadete)
         {
             return PedidosCompletadosDeUnCadete(idCadete).Count * CobroPorPedido;
         }
-        public static string[] Informe()
+        public string[] Informe()
         {
             string[] respuesta = new string[Cadetes.Count];
             int cantPedidos, jornalACobrar, i = 0;
@@ -99,7 +115,7 @@ namespace CadeteriaClass
             }
             return respuesta;
         }
-        public static List<Pedido> PedidosCompletadosDeUnCadete(int idCadete)
+        public List<Pedido> PedidosCompletadosDeUnCadete(int idCadete)
         {
             return Pedidos.FindAll(p =>
                 p.ObtenerEstado() == Pedido.EstadoPedido.Entregado &&
@@ -107,7 +123,7 @@ namespace CadeteriaClass
                 p.ObtenerCadete().ObtenerId() == idCadete
             );
         }
-        public static (bool resultado, string mensaje) AsignarCadeteAPedido(int idCadete, int idPedido)
+        public (bool resultado, string mensaje) AsignarCadeteAPedido(int idCadete, int idPedido)
         {
             Cadete existeCadete = Cadetes.Find(p => p.ObtenerId() == idCadete);
             if (existeCadete == null)
@@ -121,7 +137,7 @@ namespace CadeteriaClass
             {
                 return (false, $"Error. El pedido de id {idPedido} no se encotró en el sistema.");
             }
-            if (existePedido.ObtenerCadete() != null)
+            if (existePedido.ObtenerCadete() != null && existePedido.ObtenerCadete().ObtenerId() != 0)
             {
                 return (false, $"Error. Pedido Nro {existePedido.ObtenerNro()} ya asignado al cadete {existePedido.ObtenerCadete().ObtenerNombre()}.");
             }
@@ -136,7 +152,7 @@ namespace CadeteriaClass
             return (true, $"Pedido Nro {existePedido.ObtenerNro()} asignado al cadete {existeCadete.ObtenerNombre()}");
 
         }
-        public static (bool resultado, string mensaje) ReasignarPedido(int idCadete2, int nroPedido)
+        public (bool resultado, string mensaje) ReasignarPedido(int idCadete2, int nroPedido)
         {
             Cadete cadete2 = BuscarCadetePorId(idCadete2);
             Pedido existePedido = Pedidos.Find(p => p.ObtenerNro() == nroPedido);
@@ -163,7 +179,7 @@ namespace CadeteriaClass
                 return (true, $"Pedido {nroPedido} asignado al cadete {cadete2.ObtenerNombre()}");
             }
         }
-        public static bool CambiarEstadoDePedido(int nro, int codigo)
+        public bool CambiarEstadoDePedido(int nro, int codigo)
         {
             Pedido pedidoBuscado = BuscarPedidoPorId(nro);
 
@@ -177,10 +193,10 @@ namespace CadeteriaClass
                 return true;
             }
         }
-       /*public static string ToString()
-        {
-            return $"{Nombre} - {Telefono} - {Direccion}";
-        }
-        //informes*/
+        /*public static string ToString()
+         {
+             return $"{Nombre} - {Telefono} - {Direccion}";
+         }
+         //informes*/
     }
 }

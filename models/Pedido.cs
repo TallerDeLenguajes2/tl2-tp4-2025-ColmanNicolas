@@ -4,13 +4,12 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using CadeteClass;
 using ClienteClass;
-
+using System.Text.Json.Serialization;
 
 namespace PedidoClass
 {
     public class Pedido
     {
-        private static int Incremental = 1; //variable para toda la clase
         public int Nro { get; }
         public string DetallePedido { get; }
         public string Obs { get; }
@@ -28,15 +27,29 @@ namespace PedidoClass
             Cancelado
         }
 
-        public Pedido(string detallePedido, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente, string datosRefDireccion)
+        //Constructor para crear pedidos nuevos
+        public Pedido(int nro, string detallePedido, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente, string datosRefDireccion)
         {
-            this.Nro = Incremental++;
+            this.Nro = nro;
             this.DetallePedido = detallePedido;
             this.Obs = observacion;
             this.Estado = EstadoPedido.AprobacionPendiente;
             this.Fecha = DateTime.Now;
             this.Cliente = new Cliente(nombreCliente, direccionCliente, telefonoCliente, datosRefDireccion);
             this.Cadete = null;
+        }
+
+        //Constructor para deserialización desde JSON
+        [JsonConstructor]
+        public Pedido(int nro, string detallePedido, string obs, Cliente cliente, Cadete cadete, EstadoPedido estado, DateTime fecha)
+        {
+            this.Nro = nro;
+            this.DetallePedido = detallePedido;
+            this.Obs = obs;
+            this.Cliente = cliente;
+            this.Cadete = cadete;
+            this.Estado = estado;
+            this.Fecha = fecha;
         }
 
         public string[] VerDireccionCliente()

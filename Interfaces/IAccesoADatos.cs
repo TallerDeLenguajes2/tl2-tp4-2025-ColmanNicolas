@@ -1,7 +1,7 @@
 using CadeteriaClass;
 using CadeteClass;
-public interface IAccesoADatos
+public interface IAccesoADatos<T>
 {
-    List<Cadete> AccesoADatosCadetes();
-    void GuardarDatosDeCadetes(List<Cadete> cadetes);
+    (bool, string, List<T>) Obtener();
+    (bool,string) Guardar(List<T> t);
 }

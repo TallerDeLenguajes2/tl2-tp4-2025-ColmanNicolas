@@ -1,0 +1,52 @@
+[
+  {
+    "Nro": 1,
+    "DetallePedido": "mucha coca",
+    "Obs": "aaaaaa",
+    "Cliente": {
+      "Id": 1,
+      "Nombre": "aaaaaa",
+      "Direccion": "aaaaa",
+      "Telefono": "aaaaa",
+      "DatosReferenciaDireccion": "aaaaaa"
+    },
+    "Cadete": {
+      "Id": 5,
+      "Nombre": "Juan Rodriguez",
+      "Telefono": "3543210",
+      "Direccion": "Avenida Libertad 12"
+    },
+    "Estado": 1,
+    "Fecha": "2025-09-27T14:54:30.4868245-03:00"
+  },
+  {
+    "Nro": 2,
+    "DetallePedido": "hamburesas",
+    "Obs": "dame 3",
+    "Cliente": {
+      "Id": 1,
+      "Nombre": "juanjo",
+      "Direccion": "string",
+      "Telefono": "nose",
+      "DatosReferenciaDireccion": "string"
+    },
+    "Cadete": null,
+    "Estado": 0,
+    "Fecha": "2025-09-27T15:23:36.3286128-03:00"
+  },
+  {
+    "Nro": 3,
+    "DetallePedido": "aijusjbfdnasnfasnfioa",
+    "Obs": "string",
+    "Cliente": {
+      "Id": 1,
+      "Nombre": "string",
+      "Direccion": "string",
+      "Telefono": "string",
+      "DatosReferenciaDireccion": "string"
+    },
+    "Cadete": null,
+    "Estado": 0,
+    "Fecha": "2025-09-27T15:25:53.4595499-03:00"
+  }
+]

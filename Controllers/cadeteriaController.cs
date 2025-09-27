@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CadeteriaClass;
 using PedidoClass;
 using CadeteClass;
-using AccesoADatosCSVClass;
+using tl2_tp4_2025_ColmanNicolas.AccesoADatos;
 using tl2_tp4_2025_ColmanNicolas.Dtos;
 
 namespace tl2_tp4_2025_ColmanNicolas.Controllers;
@@ -12,23 +12,43 @@ namespace tl2_tp4_2025_ColmanNicolas.Controllers;
 [Route("api/[controller]")]
 public class CadeteriaController : ControllerBase
 {
+    private Cadeteria cadeteria; //Cadeteria ya no es clase estática
+    private AccesoADatosCadeteria ADCadeteria;
+    private AccesoADatosCadetes ADCadetes;
+    private AccesoADatosPedidos ADPedidos;
+    public (bool, string, List<Pedido>) msjPedidos;
+    public CadeteriaController()
+    {
+        ADCadeteria = new AccesoADatosCadeteria();
+        ADCadetes = new AccesoADatosCadetes();
+        ADPedidos = new AccesoADatosPedidos();
+
+        var (_, _, cadeteriaList) = ADCadeteria.Obtener();
+        cadeteria = cadeteriaList[0];
+
+        var tuplaCadetes = ADCadetes.Obtener();
+        cadeteria.IncorporarListadoDeCadetes(tuplaCadetes.Item3);
+
+        var tuplaPedidos = ADPedidos.Obtener();
+        cadeteria.IncorporarListadoDePedidos(tuplaPedidos.Item3);
+    }
 
     // GET: api/cadeteria/getPedidos
     [HttpGet("getPedidos")]
     public ActionResult<List<Pedido>> GetPedidos()
     {
-        var pedidos = Cadeteria.ObtenerPedidos();
-        if (pedidos == null || pedidos.Count == 0)
+        var pedidos = cadeteria.ObtenerPedidos();
+        if (pedidos == null)
         {
             return NotFound(new { mensaje = "No hay pedidos registrados" });
         }
         return Ok(pedidos);
     }
-        // GET: api/cadeteria/getPedidos/1
+    // GET: api/cadeteria/getPedidos/1
     [HttpGet("getPedidos/{nroPedido}")]
     public ActionResult<List<Pedido>> GetPedidoPorNro(int nroPedido)
     {
-        Pedido pedido = Cadeteria.BuscarPedidoPorId(nroPedido);
+        Pedido pedido = cadeteria.BuscarPedidoPorId(nroPedido);
         if (pedido == null)
         {
             return NotFound(new { mensaje = $"No se encontro el pedido de numero {nroPedido}" });
@@ -41,7 +61,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getCadetes")]
     public ActionResult<List<Cadete>> GetCadetes()
     {
-        var cadetes = Cadeteria.ObtenerCadetes();
+        var cadetes = cadeteria.ObtenerCadetes();
         if (cadetes == null || cadetes.Count == 0)
         {
             return NotFound(new { mensaje = "No hay cadetes registrados" });
@@ -53,7 +73,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getCadetes/{idCadete}")]
     public ActionResult<List<Cadete>> GetCadetesPorId(int idCadete)
     {
-        Cadete cadete = Cadeteria.BuscarCadetePorId(idCadete);
+        Cadete cadete = cadeteria.BuscarCadetePorId(idCadete);
         if (cadete == null)
         {
             return NotFound(new { mensaje = $"No se encontro el cadete de id: ({idCadete})" });
@@ -65,7 +85,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("getInforme")]
     public ActionResult<string[]> GetInforme()
     {
-        string[] informeDeCadetes = Cadeteria.Informe();
+        string[] informeDeCadetes = cadeteria.Informe();
         if (informeDeCadetes.Length == 0)
         {
             return NotFound(new { mensaje = "No hay datos de informe para la fecha solicitada" });
@@ -77,14 +97,16 @@ public class CadeteriaController : ControllerBase
     [HttpPost("postPedido")]
     public ActionResult AgregarPedido([FromBody] PedidoDto pedido)
     {
-        Pedido nuevoPedido = Cadeteria.CrearPedido(pedido);
+        Pedido nuevoPedido = cadeteria.CrearPedido(pedido);
 
         if (nuevoPedido == null)
         {
             return BadRequest(new { mensaje = "Los datos del pedido están incompletos o son inválidos." });
         }
 
-        Cadeteria.Pedidos.Add(nuevoPedido);
+        cadeteria.IncorporarPedido(nuevoPedido); // sumo el pedido a mi lista pedidos
+        ADPedidos.Guardar(cadeteria.ObtenerPedidos());  // recupero lista actualizada y la mando a guardar en JSON
+
         return Ok(new
         {
             mensaje = "Pedido agregado correctamente",
@@ -95,37 +117,82 @@ public class CadeteriaController : ControllerBase
     [HttpPost("postCadete")]
     public ActionResult AgregarCadete([FromBody] CadeteDto cadete)
     {
-        var (Nombre, Telefono, Direccion) = cadete;
-        Cadete nuevoCadete = Cadete.CrearCadete(Nombre,Direccion, Telefono );
-        Cadeteria.IncorporarCadete(nuevoCadete);
+        if (cadete == null)
+            return BadRequest("Datos de cadete no proporcionados.");
 
-        return Ok(new { nuevoCadete });        
+        /*if (string.IsNullOrWhiteSpace(cadete.Nombre) ||
+            string.IsNullOrWhiteSpace(cadete.Telefono) ||
+            string.IsNullOrWhiteSpace(cadete.Direccion))
+            return BadRequest("Todos los campos del cadete son obligatorios.");*/
+
+        var (Nombre, Telefono, Direccion) = cadete;
+        Cadete nuevoCadete = cadeteria.CrearCadete(Nombre, Direccion, Telefono);
+
+        /*bool agregado = cadeteria.IncorporarCadete(nuevoCadete);
+        if (!agregado)
+            return Conflict("Ya existe un cadete con los mismos datos.");*/
+        try
+        {
+            cadeteria.IncorporarCadete(nuevoCadete);
+            ADCadetes.Guardar(cadeteria.ObtenerCadetes());
+            return Ok(new { mensaje = "Cadete registrado en el sistema", nuevoCadete });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error al guardar los datos: {ex.Message}");
+        }
+
     }
+
 
     // PUT: api/cadeteria/asignar/1/2
     [HttpPut("asignar/{idCadete}/{idPedido}")]
     public ActionResult AsignarPedido(int idCadete, int idPedido)
     {
-        var (exito, mensaje) = Cadeteria.AsignarCadeteAPedido(idCadete, idPedido);
-
-        return exito ? Ok(new { mensaje }) : BadRequest(new { mensaje });
+        var (exito, mensaje) = cadeteria.AsignarCadeteAPedido(idCadete, idPedido);
+        if (exito)
+        {
+            ADPedidos.Guardar(cadeteria.ObtenerPedidos());  // recupero lista actualizada y la mando a guardar en JSON
+            return Ok(new { mensaje });
+        }
+        else
+        {
+            return BadRequest(new { mensaje });
+        }
     }
 
     // PUT: api/cadeteria/estado/1/2
     [HttpPut("estado/{idPedido}/{nuevoEstado}")]
     public ActionResult CambiarEstadoPedido(int idPedido, int nuevoEstado)
     {
-        bool exito = Cadeteria.CambiarEstadoDePedido(idPedido, nuevoEstado);
-        return exito ? Ok("Estado cambiado") : BadRequest("No se pudo cambiar el estado");
+        bool exito = cadeteria.CambiarEstadoDePedido(idPedido, nuevoEstado);
+        if (exito)
+        {
+            ADPedidos.Guardar(cadeteria.ObtenerPedidos());  // recupero lista actualizada y la mando a guardar en JSON
+            return Ok("Estado cambiado");
+        }
+        else
+        {
+            return BadRequest("No se pudo cambiar el estado");
+        }
+
     }
 
     // PUT: api/cadeteria/cambiarcadete/1/3
     [HttpPut("cambiarcadete/{idPedido}/{idNuevoCadete}")]
     public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
     {
-        var (exito, mensaje) = Cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
+        var (exito, mensaje) = cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
 
-        return exito ? Ok(new {mensaje}) : BadRequest(new {mensaje});
+        if (exito)
+        {
+            ADPedidos.Guardar(cadeteria.ObtenerPedidos());  // recupero lista actualizada y la mando a guardar en JSON
+            return Ok(new { mensaje });
+        }
+        else
+        {
+            return BadRequest(new { mensaje });
+        }
     }
 
 }

@@ -38,3 +38,46 @@ C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-Colma
 C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.pdb
 C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.genruntimeconfig.cache
 C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\ref\tl2-tp4-2025-ColmanNicolas.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.csproj.AssemblyReference.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.AssemblyInfoInputs.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.AssemblyInfo.cs
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.csproj.CoreCompileInputs.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.sourcelink.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\refint\tl2-tp4-2025-ColmanNicolas.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.xml
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.pdb
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\almacenamiento\cadetes.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\appsettings.Development.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\appsettings.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\almacenamiento\cadeteria.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.staticwebassets.endpoints.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.exe
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.deps.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.runtimeconfig.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.pdb
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.xml
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\scopedcss\bundle\tl2-tp4-2025-ColmanNicolas.styles.css
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\staticwebassets.build.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\staticwebassets.build.json.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\staticwebassets.development.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-.5CFA48E9.Up2Date
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\tl2-tp4-2025-ColmanNicolas.genruntimeconfig.cache
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\obj\Debug\net9.0\ref\tl2-tp4-2025-ColmanNicolas.dll
+C:\Users\Alumno\Desktop\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\almacenamiento\pedidos.json
+C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\almacenamiento\cadeteria.json
+C:\Users\user\Desktop\Facultad\2do-cuatrimestre-2025\taller 2\tl2-tp4-2025-ColmanNicolas\bin\Debug\net9.0\almacenamiento\pedidos.json
